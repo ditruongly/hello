@@ -1,0 +1,17 @@
+{
+  "name": "auth0",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel -p %npm_package_config_spa_app_port%"
+  },
+  "config": {
+    "spa_app_port": 80
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.15.4"
+  }
+}

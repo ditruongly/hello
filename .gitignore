@@ -1,0 +1,8 @@
+# Ordner ignorieren
+node_modules/
+dist/
+.parcel-cache/
+
+# Dateien ignorieren
+.env
+package-lock.json
