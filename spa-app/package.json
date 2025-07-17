@@ -4,10 +4,10 @@
   "description": "",
   "source": "src/index.html",
   "scripts": {
-    "start": "parcel -p %npm_package_config_spa_app_port%"
+    "start": "parcel -p $npm_package_config_spa_app_port"
   },
   "config": {
-    "spa_app_port": 80
+    "spa_app_port": 3000
   },
   "author": "",
   "license": "ISC",

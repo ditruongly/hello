@@ -5,12 +5,15 @@ const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT;
-const HOST = process.env.HOST
+const HOST = process.env.HOST;
+const ORIGIN = process.env.CROSS_ORIGIN;
 
-app.use(cors());
+app.use(cors(
+  // {origin: ORIGIN}
+));
 
-app.get("/username", (req, res) => {
-  res.json({ username: "Welt!" });
+app.post("/username", (req, res) => {
+  res.set("Content-Type", "text/plain").send("Welt!");
 });
 
 // HTTP-Server explizit erstellen und starten

@@ -2,15 +2,13 @@ const usernameApi = {
   getUsername: async () => {
     try {
       const options = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: "POST",
       };
 
+      console.log("API-URL:", window.env.API_URL); 
       const res = await fetch(`${window.env.API_URL}/username`, options);
-      const json = await res.json();
-      return json;
+      const text = await res.text(); 
+      return text;
     } catch (err) {
       console.log("Error getting username", err);
     }

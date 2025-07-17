@@ -7,9 +7,9 @@ const Welcome = {
 
     const result = await usernameApi.getUsername();
 
-    console.log(result?.username);
+    console.log("API-Antwort:", result);
 
-    const username = result?.username || "Gast";
+    const username = result || "Gast";
 
     return `
       <h1>Hallo ${username}</h1>
