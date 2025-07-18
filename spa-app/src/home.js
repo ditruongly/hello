@@ -1,14 +1,17 @@
 const Home = {
   allowAccess: async () => true,
-
   render: async () => {
     return `
       <h1>Willkommen</h1>
-      <a href="#welcome">Anmelden</a>
+      <button id="login">Anmelden</button>
     `;
   },
-
-  postRender: async () => {}
+  postRender: async () => {
+      document.getElementById("login").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await window.auth0Client.loginWithRedirect();
+    });
+  }
 };
 
 export default Home;

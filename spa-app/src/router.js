@@ -10,18 +10,24 @@ const routes = {
 const content = document.getElementById("content");
 
 const router = async () => {
+  if (new URLSearchParams(window.location.search).has("code")) {
+    await window.auth0Client.handleRedirectCallback();
+    window.history.replaceState({}, document.title, "#welcome");
+  }
+
+  if (await window.auth0Client.isAuthenticated()) {
+    window.user = await window.auth0Client.getUser();
+  }
+
   const request = location.hash.slice(1).toLowerCase() || "/";
   const page = routes[request] || Error404;
 
-  // Zugriff erlauben – bei dir vermutlich immer true
   if (await page.allowAccess()) {
     content.innerHTML = await page.render();
     await page.postRender();
   } else {
-    // Falls Zugriff nicht erlaubt, zurück zur Startseite
     window.history.replaceState({}, document.title, "/");
   }
-
 };
 
 export default router;

@@ -1,7 +1,7 @@
 import usernameApi from "./usernameApi.js";
 
 const Welcome = {
-  allowAccess: async () => true,
+  allowAccess: async () => window.auth0Client.isAuthenticated(),
 
   render: async () => {
 
@@ -13,11 +13,20 @@ const Welcome = {
 
     return `
       <h1>Hallo ${username}</h1>
-      <a href="#">Abmelden</a>
+      <button id="logout">Abmelden</button>
     `;
   },
 
-  postRender: async () => {}
+  postRender: async () => {
+      document.getElementById("logout").addEventListener("click", (e) => {
+      e.preventDefault();
+      window.auth0Client.logout({
+        logoutParams: {
+          returnTo: window.env.APP_URL,
+        },
+      });
+    });
+  }
 };
 
 export default Welcome;
