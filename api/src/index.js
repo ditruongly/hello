@@ -6,7 +6,6 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT;
 const HOST = process.env.HOST;
-const ORIGIN = process.env.CROSS_ORIGIN;
 
 app.use(cors(
   // {origin: ORIGIN}
@@ -20,6 +19,6 @@ app.post("/username", (req, res) => {
 // HTTP-Server explizit erstellen und starten
 const server = createServer(app);
 server.listen(PORT, () => {
-  console.log(`API läuft auf ${HOST}:${PORT}`);
+  console.log(`API hört auf Port ${PORT}`);
 });
 

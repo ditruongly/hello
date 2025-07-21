@@ -3,22 +3,37 @@ const express = require("express");
 const path = require("path");
 const { createServer } = require("http");
 const usernameApi = require("./usernameApi");
+const { auth, requiresAuth } = require("express-openid-connect");
 
 const {
-    HOST,
+    APP_URL,
+    ISSUER_BASE_URL,
+    CLIENT_ID,
+    SESSION_SECRET,
     PORT
 } = require("./env-config");
 
 const app = express();
 
+app.use(
+  auth({
+    issuerBaseURL: ISSUER_BASE_URL,
+    clientID: CLIENT_ID,
+    baseURL: APP_URL,
+    secret: SESSION_SECRET,
+    auth0Logout: true,
+    authRequired: false
+  })
+);
+
 app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "views")); 
 
 app.get("/", (req, res) => {
     res.render("home");
 });
 
-app.get("/welcome", async (req, res) => {
+app.get("/welcome", requiresAuth(), async (req, res) => {
   try {
     const json = await usernameApi.getUsername();
     res.render("welcome", { data: json });
@@ -29,5 +44,5 @@ app.get("/welcome", async (req, res) => {
 });
 
 createServer(app).listen(PORT, () => {
-    console.log(`WEB APP läuft auf: ${HOST}:${PORT}`);
+    console.log(`WEB-APP hört auf Port ${PORT}`);
 });
