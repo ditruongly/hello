@@ -27,7 +27,8 @@ app.use(
 );
 
 app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "views")); 
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -41,6 +42,15 @@ app.get("/welcome", requiresAuth(), async (req, res) => {
     console.error("Fehler in /welcome:", err);
     res.status(500).send("Fehler beim Rendern der Seite");
   }
+});
+
+app.get("/user", requiresAuth(), async (req, res) => {
+  res.render("user", {
+    user: req.oidc?.user,
+    id_token: req.oidc?.idToken,
+    access_token: req.oidc?.accessToken,
+    refresh_token: req.oidc?.refreshToken,
+  });
 });
 
 createServer(app).listen(PORT, () => {
