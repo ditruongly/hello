@@ -13,7 +13,8 @@ app.use(cors(
 ));
 
 app.post("/username", (req, res) => {
-  res.set("Content-Type", "text/plain").send("Welt!");
+  //res.set("Content-Type", "text/plain").send("Welt!");
+  res.json({username: "Welt!"});
 });
 
 // HTTP-Server explizit erstellen und starten
