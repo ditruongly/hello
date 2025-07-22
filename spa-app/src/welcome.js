@@ -5,11 +5,11 @@ const Welcome = {
 
   render: async () => {
 
-    const result = await usernameApi.getUsername();
+    const json = await usernameApi.getUsername();
 
-    console.log("API-Antwort:", result);
+    console.log("API-Antwort:", json);
 
-    const username = result || "Gast";
+    const username = json.username || "Gast";
 
     return `
       <h1>Hallo ${username}</h1>

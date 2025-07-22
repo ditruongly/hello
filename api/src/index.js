@@ -2,18 +2,19 @@ require("dotenv").config();
 const express = require("express");
 const { createServer } = require("http");
 const cors = require("cors");
-
+const { auth } = require("express-oauth2-jwt-bearer");
 const app = express();
 const PORT = process.env.PORT;
-const HOST = process.env.HOST;
 
 app.use(cors(
   // {origin: ORIGIN}
 ));
 
+app.use(auth());
+
 app.post("/username", (req, res) => {
   //res.set("Content-Type", "text/plain").send("Welt!");
-  res.json({username: "Welt!"});
+  res.json({username: "Welt"});
 });
 
 // HTTP-Server explizit erstellen und starten

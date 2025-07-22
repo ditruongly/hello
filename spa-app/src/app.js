@@ -4,12 +4,14 @@ import router from "./router";
   const domain = window.env.AUTH0_DOMAIN;
   const clientId = window.env.CLIENT_ID;
   const redirect_uri = window.env.APP_URL;
+  const audience = window.env.AUDIENCE;
 
   window.auth0Client = await auth0.createAuth0Client({
     domain,
     clientId,
     authorizationParams: {
       redirect_uri,
+      audience: audience
     },
   });
 

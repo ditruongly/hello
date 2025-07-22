@@ -1,18 +1,24 @@
-const usernameApi = {
-  getUsername: async () => {
-    try {
-      const options = {
-        method: "POST",
-      };
+import axios from "axios";
 
-      console.log("API-URL:", window.env.API_URL); 
-      const res = await fetch(`${window.env.API_URL}/username`, options);
-      const text = await res.text(); 
-      return text;
-    } catch (err) {
-      console.log("Error getting username", err);
+async function getUsername() {
+
+  const accessToken = await window.auth0Client.getTokenSilently();
+
+  const url = `${window.env.API_URL}/username`;
+  const payload = {};
+  const header = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
     }
-  },
+  };
+
+  const response = await axios.post(url, payload, header);
+  return response.data;
+}
+
+const usernameApi = {
+  getUsername
 };
 
-export default usernameApi;
+module.exports = usernameApi;
