@@ -2,27 +2,26 @@ require ("dotenv").config();
 const express = require("express");
 const path = require("path");
 const { createServer } = require("http");
-const usernameApi = require("./usernameApi");
 const { auth, requiresAuth } = require("express-openid-connect");
-
-const {
-    APP_URL,
-    ISSUER_BASE_URL,
-    CLIENT_ID,
-    SESSION_SECRET,
-    PORT
-} = require("./env-config");
+const env = require("./environment");
+const usernameApi = require("./usernameApi");
 
 const app = express();
 
 app.use(
   auth({
-    issuerBaseURL: ISSUER_BASE_URL,
-    clientID: CLIENT_ID,
-    baseURL: APP_URL,
-    secret: SESSION_SECRET,
+    issuerBaseURL: env.ISSUER_BASE_URL,
+    clientID: env.CLIENT_ID,
+    clientSecret: env.CLIENT_SECRET,
+    baseURL: env.APP_URL,
+    secret: env.SESSION_SECRET,
     auth0Logout: true,
-    authRequired: false
+    authRequired: false,
+    authorizationParams: {
+      response_type: 'code',
+      audience: env.AUDIENCE,
+      //scope: 'openid profile email'
+    }
   })
 );
 
@@ -33,16 +32,24 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
     res.render("home");
 });
-
 app.get("/welcome", requiresAuth(), async (req, res) => {
   try {
-    const json = await usernameApi.getUsername();
-    res.render("welcome", { data: json });
-  } catch (err) {
-    console.error("Fehler in /welcome:", err);
-    res.status(500).send("Fehler beim Rendern der Seite");
+    const accessToken = req.oidc?.accessToken?.access_token;
+    if (!accessToken) {
+      throw new Error("Access Token fehlt – API-Zugriff nicht möglich.");
+    }
+
+    const userData = await usernameApi.getUsername(accessToken);
+
+    res.render("welcome", {
+      data: userData
+    });
+  } catch (error) {
+    console.error("Fehler in /welcome:", error.message);
+    res.status(500).send("Es gab ein Problem beim Laden der Willkommensseite.");
   }
 });
+
 
 app.get("/user", requiresAuth(), async (req, res) => {
   res.render("user", {
@@ -53,6 +60,6 @@ app.get("/user", requiresAuth(), async (req, res) => {
   });
 });
 
-createServer(app).listen(PORT, () => {
-    console.log(`WEB-APP hört auf Port ${PORT}`);
+createServer(app).listen(env.PORT, () => {
+    console.log(`WEB-APP hört auf Port ${env.PORT}`);
 });

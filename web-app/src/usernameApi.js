@@ -1,16 +1,22 @@
-const { API_URL } = require("./env-config");
+const axios = require("axios");
+const env = require("./environment");
+
+async function getUsername(accessToken) {
+  const url = `${env.API_URL}/username`;
+  const payload = {};
+  const header = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
+    }
+  };
+
+  const response = await axios.post(url, payload, header);
+  return response.data;
+}
 
 const usernameApi = {
-  getUsername: async () => {
-    try {
-      const res = await fetch(`${API_URL}/username`, { method: "POST"});
-      const json = await res.json();
-      return json;
-    } catch (err) {
-      console.error("Fehler beim Abrufen des Benutzernames:", err);
-      return null;
-    }
-  }
+  getUsername
 };
 
 module.exports = usernameApi;
