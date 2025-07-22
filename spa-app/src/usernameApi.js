@@ -1,10 +1,11 @@
 import axios from "axios";
+import env from "./environment.js";
 
 async function getUsername() {
 
   const accessToken = await window.auth0Client.getTokenSilently();
 
-  const url = `${window.env.API_URL}/username`;
+  const url = `${env.API_URL}/username`;
   const payload = {};
   const header = {
     headers: {
@@ -21,4 +22,4 @@ const usernameApi = {
   getUsername
 };
 
-module.exports = usernameApi;
+export default usernameApi;

@@ -1,4 +1,5 @@
 import usernameApi from "./usernameApi.js";
+import env from "./environment.js";
 
 const Welcome = {
   allowAccess: async () => window.auth0Client.isAuthenticated(),
@@ -22,7 +23,7 @@ const Welcome = {
       e.preventDefault();
       window.auth0Client.logout({
         logoutParams: {
-          returnTo: window.env.APP_URL,
+          returnTo: env.APP_URL,
         },
       });
     });
