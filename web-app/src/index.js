@@ -20,7 +20,7 @@ app.use(
     authorizationParams: {
       response_type: 'code',
       audience: env.AUDIENCE,
-      //scope: 'openid profile email'
+      scope: 'openid profile email read:username'
     }
   })
 );
@@ -38,6 +38,9 @@ app.get("/welcome", requiresAuth(), async (req, res) => {
     if (!accessToken) {
       throw new Error("Access Token fehlt – API-Zugriff nicht möglich.");
     }
+
+    const orgId = req.oidc.idTokenClaims?.org_id;
+    console.log(`Organisation: ${orgId}`);
 
     const userData = await usernameApi.getUsername(accessToken);
 

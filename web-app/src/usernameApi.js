@@ -11,8 +11,13 @@ async function getUsername(accessToken) {
     }
   };
 
-  const response = await axios.post(url, payload, header);
-  return response.data;
+  try {
+    const response = await axios.post(url, payload, header);
+    return response.data;
+  } catch (err) {
+    console.error("Fehler bei usernameApi.getUsername:", err.response?.status, err.response?.data || err.message);
+    throw err;
+  }
 }
 
 const usernameApi = {

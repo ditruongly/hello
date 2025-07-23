@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const { createServer } = require("http");
 const cors = require("cors");
-const { auth } = require("express-oauth2-jwt-bearer");
+const { auth, requiredScopes } = require("express-oauth2-jwt-bearer");
 const app = express();
 const PORT = process.env.PORT;
 
@@ -12,7 +12,7 @@ app.use(cors(
 
 app.use(auth());
 
-app.post("/username", (req, res) => {
+app.post("/username", requiredScopes("read:username"), (req, res) => {
   //res.set("Content-Type", "text/plain").send("Welt!");
   res.json({username: "Welt"});
 });
